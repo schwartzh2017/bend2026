@@ -1,26 +1,83 @@
 @import "tailwindcss";
 
+/* Pacific Northwest Outdoors Design System */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light Mode Colors */
+  --bg-primary: #F5F0E8;
+  --bg-secondary: #EDE6D6;
+  --bg-card: #FAF7F2;
+  --text-primary: #1C1A16;
+  --text-secondary: #5C5340;
+  --text-muted: #8C7E6A;
+  --accent-primary: #3D5A3E;
+  --accent-secondary: #7A9E7E;
+  --accent-warm: #A0522D;
+  --accent-gold: #C8962E;
+  --border: #D4C9B0;
+  --shadow: rgba(28, 26, 22, 0.12);
+  --error: #B91C1C;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"] {
+  /* Dark Mode Colors */
+  --bg-primary: #1A1814;
+  --bg-secondary: #232018;
+  --bg-card: #2A2620;
+  --text-primary: #F0EBE0;
+  --text-secondary: #C4B99A;
+  --text-muted: #8C7E6A;
+  --accent-primary: #7A9E7E;
+  --accent-secondary: #3D5A3E;
+  --accent-warm: #C47A4A;
+  --accent-gold: #D4A84B;
+  --border: #3A342A;
+  --shadow: rgba(0, 0, 0, 0.4);
+  --error: #EF4444;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-primary: #1A1814;
+    --bg-secondary: #232018;
+    --bg-card: #2A2620;
+    --text-primary: #F0EBE0;
+    --text-secondary: #C4B99A;
+    --text-muted: #8C7E6A;
+    --accent-primary: #7A9E7E;
+    --accent-secondary: #3D5A3E;
+    --accent-warm: #C47A4A;
+    --accent-gold: #D4A84B;
+    --border: #3A342A;
+    --shadow: rgba(0, 0, 0, 0.4);
+    --error: #EF4444;
   }
 }
 
+@theme inline {
+  --font-display: var(--font-playfair);
+  --font-body: var(--font-source-serif);
+  --font-mono: var(--font-jetbrains);
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body), Georgia, serif;
+  line-height: 1.7;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.animate-shake {
+  animation: shake 0.3s ease-in-out;
 }
