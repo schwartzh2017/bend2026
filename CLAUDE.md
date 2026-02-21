@@ -148,3 +148,15 @@ Load these skill files at the start of relevant sessions:
 - Noelle Arneburg
 - Simon Arneburg
 - Zani Moore
+
+## Nights each person spent
+- Haleigh Schwartz: 3 nights
+- Liz Kaniecki: 3 nights
+- Mike: 3 nights
+- Evan Watson: 2 nights
+- Jane Liggett: 1 night
+- Mack Peters: 3 nights
+- Bretten Farrell: 3 nights
+- Noelle Arneburg: 3 nights
+- Simon Arneburg: 3 nights
+- Zani Moore: 2 nights
