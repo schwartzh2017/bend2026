@@ -31,7 +31,7 @@ function isPublicRoute(pathname: string): boolean {
   return false
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value
   const isAuthenticated = sessionToken ? await verifySession(sessionToken) : false
