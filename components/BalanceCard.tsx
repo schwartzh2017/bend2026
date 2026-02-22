@@ -1,17 +1,9 @@
 import HomeCard from './HomeCard'
+import { formatCurrency } from '@/lib/formatCurrency'
 
 type Props = {
   personId: string | null
   balanceCents: number | null
-}
-
-function formatCurrency(cents: number): string {
-  const dollars = Math.abs(cents) / 100
-  return dollars.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  })
 }
 
 export default function BalanceCard({ personId, balanceCents }: Props) {
@@ -23,34 +15,40 @@ export default function BalanceCard({ personId, balanceCents }: Props) {
     )
   }
 
-  const isPositive = balanceCents !== null && balanceCents > 0
-  const isNegative = balanceCents !== null && balanceCents < 0
-  const isZero = balanceCents !== null && balanceCents === 0
-
-  let displayText: string
-  let textColor: string
-
-  if (isZero) {
-    displayText = 'All settled up'
-    textColor = 'var(--text-secondary)'
-  } else if (isPositive) {
-    displayText = `You're owed ${formatCurrency(balanceCents!)}`
-    textColor = 'var(--accent-primary)'
-  } else if (isNegative) {
-    displayText = `You owe ${formatCurrency(balanceCents!)}`
-    textColor = 'var(--accent-warm)'
-  } else {
-    displayText = 'No expenses yet'
-    textColor = 'var(--text-muted)'
+  if (balanceCents === null) {
+    return (
+      <HomeCard title="Your Balance" href="/expenses/settle">
+        <p style={{ color: 'var(--text-muted)' }}>No expenses yet</p>
+      </HomeCard>
+    )
   }
+
+  if (balanceCents === 0) {
+    return (
+      <HomeCard title="Your Balance" href="/expenses/settle">
+        <p
+          className="font-[family-name:var(--font-tenor)] text-2xl"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          All settled up
+        </p>
+      </HomeCard>
+    )
+  }
+
+  const isPositive = balanceCents > 0
+  const label = isPositive ? "You're owed" : 'You owe'
+  const amountColor = isPositive ? 'var(--accent-primary)' : 'var(--accent-warm)'
 
   return (
     <HomeCard title="Your Balance" href="/expenses/settle">
-      <p
-        className="font-[family-name:var(--font-tenor)] text-2xl"
-        style={{ color: textColor }}
-      >
-        {displayText}
+      <p style={{ color: amountColor }}>
+        <span className="font-[family-name:var(--font-baskerville)] text-base">
+          {label}{' '}
+        </span>
+        <span className="font-[family-name:var(--font-jetbrains)] text-2xl">
+          {formatCurrency(Math.abs(balanceCents))}
+        </span>
       </p>
     </HomeCard>
   )

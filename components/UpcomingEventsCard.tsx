@@ -46,7 +46,7 @@ export default function UpcomingEventsCard({ events }: Props) {
                 style={{ backgroundColor: dotColor }}
               />
               <time
-                className="font-mono text-sm flex-shrink-0"
+                className="font-[family-name:var(--font-jetbrains)] text-sm flex-shrink-0"
                 style={{ color: 'var(--text-muted)' }}
               >
                 {date} · {time}

@@ -18,7 +18,7 @@ export default function HomeCard({ title, href, children }: Props) {
         }}
       >
         <h2
-          className="font-[family-name:var(--font-tenor)] text-xs uppercase tracking-wider mb-3"
+          className="font-[family-name:var(--font-tenor)] text-xs uppercase tracking-[0.06em] mb-3"
           style={{ color: 'var(--text-muted)' }}
         >
           {title}
