@@ -41,12 +41,14 @@ export default function GroceryPage() {
     )
 
     try {
-      await fetch('/api/grocery-items', {
+      const response = await fetch('/api/grocery-items', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, is_checked }),
       })
+      if (!response.ok) throw new Error('Failed to update')
     } catch (err) {
+      // Roll back optimistic update on any failure (network or non-2xx)
       setItems((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, is_checked: !is_checked } : item
@@ -76,7 +78,7 @@ export default function GroceryPage() {
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-[680px] mx-auto p-4">
         <h1
-          className="font-[family-name:var(--font-tenor)] font-bold text-3xl mb-6"
+          className="font-[family-name:var(--font-tenor)] text-3xl mb-6"
           style={{ color: 'var(--text-primary)' }}
         >
           Grocery List
