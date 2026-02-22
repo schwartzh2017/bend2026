@@ -37,7 +37,7 @@ export async function proxy(request: NextRequest) {
   const isAuthenticated = sessionToken ? await verifySession(sessionToken) : false
 
   if (isAuthenticated) {
-    if (isPublicRoute(pathname)) {
+    if (pathname === '/login') {
       return NextResponse.redirect(new URL('/', request.url))
     }
     return NextResponse.next()
