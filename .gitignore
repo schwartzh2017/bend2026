@@ -42,3 +42,4 @@ next-env.d.ts
 
 # Claude worktrees (git repos, never commit)
 .claude/worktrees/
+.opencode/
