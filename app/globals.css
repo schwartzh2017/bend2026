@@ -54,8 +54,8 @@
 }
 
 @theme inline {
-  --font-display: var(--font-playfair);
-  --font-body: var(--font-source-serif);
+  --font-display: var(--font-tenor);
+  --font-body: var(--font-baskerville);
   --font-mono: var(--font-jetbrains);
 }
 

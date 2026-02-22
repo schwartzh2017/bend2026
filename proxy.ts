@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Allow public routes through without authentication
-  if (PUBLIC_ROUTES.includes(pathname as any)) {
+  if ((PUBLIC_ROUTES as readonly string[]).includes(pathname)) {
     return NextResponse.next()
   }
 

@@ -1,21 +1,16 @@
 'use client'
 
-type Event = {
-  id: string
-  title: string
-  description: string | null
-  location: string | null
-  starts_at: string
-  ends_at: string | null
-  event_type: 'activity' | 'meal' | 'travel' | 'free'
+import type { Event } from '@/lib/supabase/types'
+
+const eventTypeStyle: Record<string, { borderColor: string; backgroundColor: string }> = {
+  travel:   { borderColor: 'var(--accent-secondary)', backgroundColor: 'var(--accent-secondary)' },
+  activity: { borderColor: 'var(--accent-primary)',   backgroundColor: 'var(--accent-primary)' },
+  meal:     { borderColor: 'var(--accent-warm)',       backgroundColor: 'var(--accent-warm)' },
+  free:     { borderColor: 'var(--text-muted)',        backgroundColor: 'var(--text-muted)' },
+  lodging:  { borderColor: 'var(--accent-gold)',       backgroundColor: 'var(--accent-gold)' },
 }
 
-const eventTypeColors: Record<Event['event_type'], { border: string; dot: string }> = {
-  travel: { border: 'border-[#7A9E7E]', dot: 'bg-[#7A9E7E]' },
-  activity: { border: 'border-[#3D5A3E]', dot: 'bg-[#3D5A3E]' },
-  meal: { border: 'border-[#A0522D]', dot: 'bg-[#A0522D]' },
-  free: { border: 'border-[#8C7E6A]', dot: 'bg-[#8C7E6A]' },
-}
+const fallbackStyle = eventTypeStyle.activity
 
 type Props = {
   event: Event
@@ -24,46 +19,61 @@ type Props = {
 }
 
 export default function TimelineEvent({ event, isExpanded, onToggle }: Props) {
-  const colors = eventTypeColors[event.event_type]
-  
+  const colors = eventTypeStyle[event.event_type] ?? fallbackStyle
+
   const startTime = new Date(event.starts_at).toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
     timeZone: 'America/Los_Angeles',
   })
 
+  const endTime = event.ends_at
+    ? new Date(event.ends_at).toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Los_Angeles',
+      })
+    : null
+
   return (
     <button
       onClick={onToggle}
+      aria-expanded={isExpanded}
       className="w-full text-left group"
     >
-      <div className={`flex gap-4 py-4 border-l-2 pl-4 ${colors.border}`}>
+      <div
+        className="flex gap-4 py-4 border-l-2 pl-4"
+        style={{ borderColor: colors.borderColor }}
+      >
         <div className="flex flex-col items-center">
-          <div className={`w-2 h-2 rounded-full -ml-[21px] ${colors.dot}`} />
+          <div
+            className="w-2 h-2 rounded-full -ml-[21px]"
+            style={{ backgroundColor: colors.backgroundColor }}
+          />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-3 flex-wrap">
             <time className="font-mono text-sm text-[var(--text-muted)]">
-              {startTime}
+              {endTime ? `${startTime} – ${endTime}` : startTime}
             </time>
-            <h3 className="font-[family-name:var(--font-playfair)] italic text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-primary)]">
+            <h3 className="font-[family-name:var(--font-tenor)] text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-primary)]">
               {event.title}
             </h3>
           </div>
-          
+
           <div
             className={`overflow-hidden transition-all duration-200 ${
-              isExpanded ? 'max-h-40 mt-2' : 'max-h-0'
+              isExpanded ? 'max-h-96 mt-2' : 'max-h-0'
             }`}
           >
             {event.description && (
-              <p className="font-[family-name:var(--font-source-serif)] text-[var(--text-secondary)] text-sm leading-relaxed">
+              <p className="font-[family-name:var(--font-baskerville)] text-[var(--text-secondary)] text-sm leading-relaxed">
                 {event.description}
               </p>
             )}
             {event.location && (
-              <p className="font-[family-name:var(--font-source-serif)] text-[var(--text-muted)] text-sm mt-1">
+              <p className="font-[family-name:var(--font-baskerville)] text-[var(--text-muted)] text-sm mt-1">
                 📍 {event.location}
               </p>
             )}

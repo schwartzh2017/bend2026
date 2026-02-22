@@ -27,7 +27,7 @@ restraint — every element earns its place.
 Occasional rugged texture. Nothing superfluous.
 
 **Anti-patterns to avoid at all costs:**
-- Generic "SaaS dashboard" look (blue gradients, rounded cards everywhere, Inter font)
+- Generic "SaaS dashboard" look (blue gradients, rounded cards everywhere, Inter or Roboto font)
 - Cluttered layouts with too many competing elements
 - Pastel or overly bright color schemes
 - Stock-photo vibes or corporate polish
@@ -87,13 +87,13 @@ Use CSS variables for all colors. Both light and dark themes must be defined.
 ## Typography
 
 ### Font Pairing
-- **Display / Headings:** `Playfair Display` — serif, editorial, strong personality
-- **Body / UI:** `Source Serif 4` — readable serif that pairs beautifully, not sterile
+- **Display / Headings:** `Tenor Sans` — elegant, refined, distinctive without being loud
+- **Body / UI:** `Libre Baskerville` — warm, classic, optimized for screen readability
 - **Monospace / Data:** `JetBrains Mono` — for amounts, times, codes
 
 Load from Google Fonts:
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 ```
 
 ### Type Scale
@@ -110,12 +110,14 @@ Load from Google Fonts:
 ```
 
 ### Typography Rules
-- Page titles use Playfair Display 700 or 900 weight — go big and bold
-- Italic Playfair Display for section labels and decorative text moments
-- Body text uses Source Serif 4 at 300 or 400 weight — never heavy
+- Page titles use Tenor Sans — it has natural elegance at large sizes, no need to go ultra-heavy
+- Tenor Sans for all navigation labels, section headers, and category titles
+- Body text uses Libre Baskerville at regular (400) weight — highly readable at all sizes
+- Italic Libre Baskerville for supporting text, captions, and decorative text moments
 - Monetary amounts and times always use JetBrains Mono
-- Line height for body: 1.7. Line height for display: 1.1
-- Letter spacing on uppercase labels: 0.08em
+- Line height for body: 1.7. Line height for display: 1.2
+- Letter spacing on Tenor Sans uppercase labels: 0.06em
+- Never bold Tenor Sans — its elegance comes from its single weight
 
 ---
 
@@ -175,7 +177,7 @@ Cards should feel like torn journal pages or field notebook entries, not SaaS ti
 - Primary: forest green bg, warm off-white text, no border-radius or very subtle (2px)
 - Secondary: transparent bg, forest green border and text
 - Destructive: sienna color scheme
-- All buttons: Source Serif 4, slightly tracked uppercase label, or natural case display
+- All buttons: Tenor Sans, slightly tracked uppercase label, or natural case display
 
 ### Forms & Inputs
 - Underline style inputs (no box) for a cleaner, more editorial feel
@@ -192,7 +194,7 @@ Cards should feel like torn journal pages or field notebook entries, not SaaS ti
 ## Feature-Specific Design Notes
 
 **Schedule View:** Think timeline, not calendar grid. Vertical flow. Time markers on
-the left in JetBrains Mono. Event titles in Playfair Display italic. Use forest green
+the left in JetBrains Mono. Event titles in Tenor Sans. Use forest green
 left-border accent for current/active events.
 
 **Expense Splitter:** Amounts always in JetBrains Mono. Who-owes-who should be
@@ -200,7 +202,7 @@ scannable at a glance — use color (green = owed to you, sienna = you owe) with
 typographic hierarchy. Avoid table-heavy layouts.
 
 **Grocery List:** Checkbox items with satisfying strike-through animation on check.
-Group by category with bold Playfair Display category headers.
+Group by category with bold Tenor Sans category headers.
 
 **Game Rules & Airbnb Doc:** Treat these as reading experiences. Generous line height,
 max 65ch width, comfortable body text. Not a wall of text — use bold headers and
@@ -223,7 +225,7 @@ Every screen Claude builds must be:
 
 | Do | Don't |
 |---|---|
-| Playfair Display for headings | Inter, Roboto, or system-ui for headings |
+| Tenor Sans for headings | Inter, Roboto, or system-ui for headings |
 | Warm earth tones from the palette | Arbitrary hex values |
 | 2px or no border-radius on cards | 12px+ rounded corners everywhere |
 | Bold typographic hierarchy | Equal weight on everything |

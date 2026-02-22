@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import { Tenor_Sans, Libre_Baskerville, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
+const tenorSans = Tenor_Sans({
+  variable: "--font-tenor",
   subsets: ["latin"],
-  weight: ["700", "900"],
-  style: ["normal", "italic"],
+  weight: "400",
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-baskerville",
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
+  weight: ["400", "700"],
   style: ["normal", "italic"],
 });
 
@@ -35,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfairDisplay.variable} ${sourceSerif.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${tenorSans.variable} ${libreBaskerville.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
       </body>
