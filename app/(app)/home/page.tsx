@@ -22,6 +22,7 @@ export default async function HomePage() {
         <BalanceCard
           personId={data.personId}
           balanceCents={data.balanceCents}
+          myTransactions={data.myTransactions}
         />
         <GroceriesCard items={data.recentGroceries} />
       </div>
