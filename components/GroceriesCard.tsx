@@ -1,7 +1,9 @@
 import HomeCard from './HomeCard'
-import type { Tables } from '@/lib/supabase/types'
+import type { Tables, Person } from '@/lib/supabase/types'
 
-type GroceryItem = Tables<'grocery_items'>
+type GroceryItem = Tables<'grocery_items'> & {
+  requested_by: Person | null
+}
 
 type Props = {
   items: GroceryItem[]
@@ -35,7 +37,7 @@ export default function GroceriesCard({ items }: Props) {
                 className="text-sm"
                 style={{ color: 'var(--text-muted)' }}
               >
-                ({item.requested_by})
+                ({item.requested_by.name})
               </span>
             )}
           </div>

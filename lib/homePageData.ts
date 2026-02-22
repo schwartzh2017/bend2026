@@ -4,7 +4,11 @@ import {
   calculateExpenseShares,
   type ExpenseWithParticipants,
 } from '@/lib/expenseLogic'
-import type { Tables } from '@/lib/supabase/types'
+import type { Tables, Person } from '@/lib/supabase/types'
+
+type GroceryItemWithPerson = Tables<'grocery_items'> & {
+  requested_by: Person | null
+}
 
 export type HomePageData = {
   tripStartDate: string | null
@@ -12,7 +16,7 @@ export type HomePageData = {
   personId: string | null
   personName: string | null
   balanceCents: number | null
-  recentGroceries: Tables<'grocery_items'>[]
+  recentGroceries: GroceryItemWithPerson[]
 }
 
 export async function getHomePageData(personId: string | null): Promise<HomePageData> {
@@ -40,7 +44,7 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
     supabase.from('people').select('*'),
     supabase
       .from('grocery_items')
-      .select('*')
+      .select(`*, requested_by:people(*)`)
       .order('created_at', { ascending: false })
       .limit(3),
   ])
@@ -48,7 +52,7 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
   const configData = configDataRaw as AppConfigRow | null
   const tripStartDate = configData?.trip_start_date ?? null
   const upcomingEvents: Tables<'events'>[] = eventsData ?? []
-  const recentGroceries: Tables<'grocery_items'>[] = groceriesData ?? []
+  const recentGroceries: GroceryItemWithPerson[] = groceriesData ?? []
 
   let balanceCents: number | null = null
   let personName: string | null = null
