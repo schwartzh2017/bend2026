@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     cookieStore.set('bend_person_id', personId, {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: COOKIE_MAX_AGE_SECONDS,
       path: '/',
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     cookieStore.set('bend_person_name', personName, {
       httpOnly: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: COOKIE_MAX_AGE_SECONDS,
       path: '/',
