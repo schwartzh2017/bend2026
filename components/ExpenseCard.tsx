@@ -54,7 +54,7 @@ export default function ExpenseCard({ expense }: Props) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h4
-            className="font-[family-name:var(--font-playfair)] italic text-lg"
+            className="font-[family-name:var(--font-baskerville)] italic text-lg"
             style={{ color: 'var(--text-primary)' }}
           >
             {expense.title}
