@@ -180,7 +180,7 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
             color: 'var(--text-primary)',
           }}
         >
-          <option value="">Who's asking?</option>
+          <option value="">Who&apos;s asking?</option>
           {people.map((person) => (
             <option key={person.id} value={person.id}>
               {person.name}

@@ -22,7 +22,7 @@ export default function GroceryPage() {
       if (!response.ok) throw new Error('Failed to fetch')
       const data = await response.json()
       setItems(data.data || [])
-    } catch (err) {
+    } catch {
       setError('Failed to load grocery list')
     } finally {
       setIsLoading(false)
@@ -46,7 +46,7 @@ export default function GroceryPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, is_checked }),
       })
-    } catch (err) {
+    } catch {
       setItems((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, is_checked: !is_checked } : item
