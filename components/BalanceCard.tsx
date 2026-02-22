@@ -2,7 +2,6 @@ import HomeCard from './HomeCard'
 
 type Props = {
   personId: string | null
-  personName: string | null
   balanceCents: number | null
 }
 
@@ -15,7 +14,7 @@ function formatCurrency(cents: number): string {
   })
 }
 
-export default function BalanceCard({ personId, personName, balanceCents }: Props) {
+export default function BalanceCard({ personId, balanceCents }: Props) {
   if (!personId) {
     return (
       <HomeCard title="Your Balance" href="/identify?returnUrl=/">

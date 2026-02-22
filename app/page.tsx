@@ -19,7 +19,6 @@ export default async function Home() {
         <UpcomingEventsCard events={data.upcomingEvents} />
         <BalanceCard
           personId={data.personId}
-          personName={data.personName}
           balanceCents={data.balanceCents}
         />
         <GroceriesCard items={data.recentGroceries} />
