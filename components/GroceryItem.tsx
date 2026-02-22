@@ -20,6 +20,7 @@ export default function GroceryItem({ item, onToggle }: Props) {
         checked={item.is_checked}
         onChange={() => onToggle(item.id, !item.is_checked)}
         className="grocery-checkbox mt-0.5"
+        aria-label={`Mark ${item.name} as ${item.is_checked ? 'unchecked' : 'checked'}`}
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">

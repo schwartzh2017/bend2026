@@ -1,18 +1,28 @@
-export default function HomePage() {
+import { cookies } from 'next/headers'
+import { LOCAL_STORAGE_KEYS } from '@/lib/constants'
+import CountdownCard from '@/components/CountdownCard'
+import UpcomingEventsCard from '@/components/UpcomingEventsCard'
+import BalanceCard from '@/components/BalanceCard'
+import GroceriesCard from '@/components/GroceriesCard'
+import { getHomePageData } from '@/lib/homePageData'
+
+export default async function HomePage() {
+  const cookieStore = await cookies()
+  const personId = cookieStore.get(LOCAL_STORAGE_KEYS.PERSON_ID)?.value ?? null
+
+  const data = await getHomePageData(personId)
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
-      <h1
-        className="text-4xl mb-4"
-        style={{ fontFamily: 'var(--font-tenor)', color: 'var(--text-primary)' }}
-      >
-        Bend 2026
-      </h1>
-      <p
-        className="text-lg"
-        style={{ fontFamily: 'var(--font-baskerville)', color: 'var(--text-muted)' }}
-      >
-        Welcome to the trip
-      </p>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+      <div className="max-w-[680px] mx-auto p-4 space-y-4">
+        <CountdownCard tripStartDate={data.tripStartDate} />
+        <UpcomingEventsCard events={data.upcomingEvents} />
+        <BalanceCard
+          personId={data.personId}
+          balanceCents={data.balanceCents}
+        />
+        <GroceriesCard items={data.recentGroceries} />
+      </div>
     </div>
   )
 }

@@ -30,7 +30,7 @@ export default function GroceryCategoryHeader({ category, count }: Props) {
         style={{ backgroundColor: config.color }}
       />
       <h3
-        className="font-[family-name:var(--font-tenor)] font-bold text-sm uppercase tracking-[0.1em]"
+        className="font-[family-name:var(--font-tenor)] text-sm uppercase tracking-[0.06em]"
         style={{ color: 'var(--text-secondary)' }}
       >
         {config.label}
