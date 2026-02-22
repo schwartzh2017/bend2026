@@ -44,12 +44,25 @@ function IdentifyContent() {
     fetchPeople()
   }, [])
 
-  const handleSelect = (person: Person) => {
-    // Store person info in localStorage
-    // TODO: Consider moving this to JWT payload for better security
-    localStorage.setItem(LOCAL_STORAGE_KEYS.PERSON_ID, person.id)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.PERSON_NAME, person.name)
-    router.push(safeReturnUrl)
+  const handleSelect = async (person: Person) => {
+    try {
+      const response = await fetch('/api/identify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ personId: person.id, personName: person.name }),
+      })
+
+      if (!response.ok) {
+        console.error('Failed to set identity cookies')
+        return
+      }
+
+      localStorage.setItem(LOCAL_STORAGE_KEYS.PERSON_ID, person.id)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.PERSON_NAME, person.name)
+      router.push(safeReturnUrl)
+    } catch (err) {
+      console.error('Identify error:', err)
+    }
   }
 
   if (isLoading) {
