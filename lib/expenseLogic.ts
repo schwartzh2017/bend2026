@@ -19,8 +19,6 @@ export function distributeEvenly(
   const base = Math.floor(totalCents / count)
   const remainder = totalCents % count
 
-  // Rotate order so the payer is last — non-payers get extra pennies first.
-  // Payer only absorbs an extra penny if remainder exhausts all non-payers.
   const payerIndex = participantIds.indexOf(payerId)
   const order: string[] = payerIndex === -1
     ? participantIds
