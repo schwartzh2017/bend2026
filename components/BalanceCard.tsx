@@ -1,12 +1,14 @@
 import HomeCard from './HomeCard'
 import { formatCurrency } from '@/lib/formatCurrency'
+import type { HomePageTransaction } from '@/lib/homePageData'
 
 type Props = {
   personId: string | null
   balanceCents: number | null
+  myTransactions: HomePageTransaction[]
 }
 
-export default function BalanceCard({ personId, balanceCents }: Props) {
+export default function BalanceCard({ personId, balanceCents, myTransactions }: Props) {
   if (!personId) {
     return (
       <HomeCard title="Your Balance" href="/identify?returnUrl=/">
@@ -36,20 +38,21 @@ export default function BalanceCard({ personId, balanceCents }: Props) {
     )
   }
 
-  const isPositive = balanceCents > 0
-  const label = isPositive ? "You're owed" : 'You owe'
-  const amountColor = isPositive ? 'var(--accent-primary)' : 'var(--accent-warm)'
-
   return (
     <HomeCard title="Your Balance" href="/expenses/settle">
-      <p style={{ color: amountColor }}>
-        <span className="font-[family-name:var(--font-baskerville)] text-base">
-          {label}{' '}
-        </span>
-        <span className="font-[family-name:var(--font-jetbrains)] text-2xl">
-          {formatCurrency(Math.abs(balanceCents))}
-        </span>
-      </p>
+      <div className="space-y-1.5">
+        {myTransactions.map((t) => (
+          <p key={t.counterpartId} style={{ color: t.direction === 'owe' ? 'var(--accent-warm)' : 'var(--accent-primary)' }}>
+            <span className="font-[family-name:var(--font-baskerville)] text-sm">
+              {t.direction === 'owe' ? 'You owe ' : ''}
+              {t.direction === 'owed' ? `${t.counterpartName} owes you ` : t.counterpartName + ' '}
+            </span>
+            <span className="font-[family-name:var(--font-jetbrains)] text-lg">
+              {formatCurrency(t.amountCents)}
+            </span>
+          </p>
+        ))}
+      </div>
     </HomeCard>
   )
 }
