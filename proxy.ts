@@ -1,43 +1,53 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { verifySession } from '@/lib/auth'
-import { SESSION_COOKIE_NAME, PUBLIC_ROUTES, PUBLIC_ROUTE_PREFIXES } from '@/lib/constants'
+import { jwtVerify } from 'jose'
+import { SESSION_COOKIE_NAME, JWT_MIN_SECRET_LENGTH } from '@/lib/constants'
+
+function getJWTSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET
+  if (!secret || secret.length < JWT_MIN_SECRET_LENGTH) {
+    return new Uint8Array()
+  }
+  return new TextEncoder().encode(secret)
+}
+
+async function verifySession(token: string): Promise<boolean> {
+  try {
+    const secret = getJWTSecret()
+    if (secret.length === 0) return false
+    await jwtVerify(token, secret)
+    return true
+  } catch {
+    return false
+  }
+}
+
+const PUBLIC_ROUTES = ['/login', '/identify']
+const PUBLIC_ROUTE_PREFIXES = ['/api/auth']
+
+function isPublicRoute(pathname: string): boolean {
+  if (PUBLIC_ROUTES.includes(pathname)) return true
+  if (PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return true
+  return false
+}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-
-  // Allow public routes through without authentication
-  if ((PUBLIC_ROUTES as readonly string[]).includes(pathname)) {
-    return NextResponse.next()
-  }
-
-  // Allow public route prefixes (like /api/auth)
-  if (PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-    return NextResponse.next()
-  }
-
-  // Check for valid session
   const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value
+  const isAuthenticated = sessionToken ? await verifySession(sessionToken) : false
 
-  if (sessionToken && (await verifySession(sessionToken))) {
+  if (isAuthenticated) {
+    if (isPublicRoute(pathname)) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
     return NextResponse.next()
   }
 
-  // Redirect to login with return URL
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next()
+  }
+
   const loginUrl = new URL('/login', request.url)
   loginUrl.searchParams.set('returnUrl', pathname)
   return NextResponse.redirect(loginUrl)
-}
-
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',
-  ],
 }
