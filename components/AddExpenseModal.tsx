@@ -189,7 +189,7 @@ export default function AddExpenseModal({ isOpen, onClose, onExpenseAdded }: Pro
       >
         <div className="sticky top-0 flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-card)' }}>
           <h2
-            className="font-[family-name:var(--font-playfair)] text-2xl font-bold"
+            className="font-[family-name:var(--font-tenor)] text-2xl"
             style={{ color: 'var(--text-primary)' }}
           >
             Add Expense

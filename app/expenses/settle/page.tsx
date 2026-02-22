@@ -11,11 +11,19 @@ import SettlementClient from './SettlementClient'
 export default async function SettlePage() {
   const supabase = await createServerSupabaseClient()
 
-  const [{ data: expensesData }, { data: participantsData }, { data: peopleData }] = await Promise.all([
+  const [
+    { data: expensesData, error: expensesError },
+    { data: participantsData, error: participantsError },
+    { data: peopleData, error: peopleError },
+  ] = await Promise.all([
     supabase.from('expenses').select('*').order('date', { ascending: false }),
     supabase.from('expense_participants').select('*'),
     supabase.from('people').select('*'),
   ])
+
+  if (expensesError) console.error('Failed to fetch expenses:', expensesError.message)
+  if (participantsError) console.error('Failed to fetch participants:', participantsError.message)
+  if (peopleError) console.error('Failed to fetch people:', peopleError.message)
 
   if (!expensesData || !participantsData || !peopleData) {
     return (
@@ -38,7 +46,7 @@ export default async function SettlePage() {
 
   const expensesWithShares: ExpenseWithParticipants[] = expenses.map((expense) => {
     const expenseParticipants = participantsByExpense.get(expense.id) ?? []
-    const isLodging = expenseParticipants.some((p) => p.nights !== null)
+    const isLodging = expense.category === 'lodging' && expenseParticipants.some((p) => p.nights !== null)
 
     const nightsMap = isLodging
       ? new Map(expenseParticipants.map((p) => [p.person_id, p.nights ?? 0]))

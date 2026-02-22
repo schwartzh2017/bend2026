@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { formatCurrency } from '@/lib/formatCurrency'
+import { getSettlementStatus } from '@/lib/expenseLogic'
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants'
-import type { SettlementPerson, SettlementTransaction } from '@/app/expenses/settle/SettlementClient'
+import type { SettlementPerson } from '@/app/expenses/settle/SettlementClient'
 import type { Person, Settlement } from '@/lib/supabase/types'
 
 type SettlementWithPeople = Settlement & {
@@ -13,7 +14,6 @@ type SettlementWithPeople = Settlement & {
 
 type Props = {
   people: SettlementPerson[]
-  transactions: SettlementTransaction[]
   onClose: () => void
 }
 
@@ -36,20 +36,22 @@ export default function SettlementTransactions({ people, onClose }: Props) {
   }, [])
 
   useEffect(() => {
-    const syncAndFetch = async () => {
+    const loadSettlements = async () => {
       try {
-        const syncResponse = await fetch('/api/settlements', { method: 'POST' })
-        if (!syncResponse.ok) {
-          throw new Error('Failed to sync settlements')
-        }
-
+        // Load existing settlements — preserve any confirmation state
         const fetchResponse = await fetch('/api/settlements')
-        if (!fetchResponse.ok) {
-          throw new Error('Failed to fetch settlements')
-        }
-
+        if (!fetchResponse.ok) throw new Error('Failed to fetch settlements')
         const { data } = await fetchResponse.json()
-        setSettlements(data || [])
+
+        // Only generate settlements if none exist yet (first open ever)
+        if (!data || data.length === 0) {
+          const syncResponse = await fetch('/api/settlements', { method: 'POST' })
+          if (!syncResponse.ok) throw new Error('Failed to generate settlements')
+          const syncData = await syncResponse.json()
+          setSettlements(syncData.data || [])
+        } else {
+          setSettlements(data)
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong')
       } finally {
@@ -57,8 +59,23 @@ export default function SettlementTransactions({ people, onClose }: Props) {
       }
     }
 
-    syncAndFetch()
+    loadSettlements()
   }, [])
+
+  const handleRecalculate = async () => {
+    setIsLoading(true)
+    setError('')
+    try {
+      const syncResponse = await fetch('/api/settlements', { method: 'POST' })
+      if (!syncResponse.ok) throw new Error('Failed to recalculate')
+      const { data } = await syncResponse.json()
+      setSettlements(data || [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to recalculate')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleConfirm = async (
     settlementId: string,
@@ -92,12 +109,6 @@ export default function SettlementTransactions({ people, onClose }: Props) {
     }
   }
 
-  const getSettlementStatus = (s: Settlement): 'pending' | 'partial' | 'settled' => {
-    if (s.sender_confirmed && s.receiver_confirmed) return 'settled'
-    if (s.sender_confirmed || s.receiver_confirmed) return 'partial'
-    return 'pending'
-  }
-
   const getStatusStyles = (status: 'pending' | 'partial' | 'settled') => {
     switch (status) {
       case 'settled':
@@ -126,13 +137,21 @@ export default function SettlementTransactions({ people, onClose }: Props) {
           <h2 className="font-[family-name:var(--font-tenor)] text-xl text-[var(--text-primary)]">
             Settle Up
           </h2>
-          <button
-            onClick={onClose}
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl leading-none"
-            aria-label="Close"
-          >
-            ×
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleRecalculate}
+              className="text-xs font-[family-name:var(--font-baskerville)] text-[var(--text-muted)] hover:text-[var(--text-primary)] underline"
+            >
+              Recalculate
+            </button>
+            <button
+              onClick={onClose}
+              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl leading-none"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         <div className="p-4">
@@ -146,7 +165,7 @@ export default function SettlementTransactions({ people, onClose }: Props) {
 
           <div className="space-y-3">
             {settlements.map((s) => {
-              const status = getSettlementStatus(s)
+              const status = getSettlementStatus(s.sender_confirmed, s.receiver_confirmed)
               const styles = getStatusStyles(status)
               const isCurrentUserSender = s.from_person_id === currentUserId
               const isCurrentUserReceiver = s.to_person_id === currentUserId

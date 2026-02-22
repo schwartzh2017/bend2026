@@ -19,19 +19,23 @@ export function distributeEvenly(
   const base = Math.floor(totalCents / count)
   const remainder = totalCents % count
 
+  // Rotate order so the payer is last — non-payers get extra pennies first.
+  // Payer only absorbs an extra penny if remainder exhausts all non-payers.
   const payerIndex = participantIds.indexOf(payerId)
+  const order: string[] = payerIndex === -1
+    ? participantIds
+    : [
+        ...participantIds.slice(payerIndex + 1),
+        ...participantIds.slice(0, payerIndex),
+        participantIds[payerIndex],
+      ]
 
-  return participantIds.map((personId, i) => {
-    let amount = base
-    if (i < remainder) {
-      amount += 1
-    }
-    if (personId === payerId && payerIndex >= remainder) {
-      amount += remainder > 0 && payerIndex < remainder ? 0 : 0
-    }
+  const extraSet = new Set(order.slice(0, remainder))
 
-    return { personId, amountCents: amount }
-  })
+  return participantIds.map((personId) => ({
+    personId,
+    amountCents: extraSet.has(personId) ? base + 1 : base,
+  }))
 }
 
 export function calculateLodgingShares(

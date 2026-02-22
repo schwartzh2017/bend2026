@@ -44,7 +44,7 @@ export default function SettlementOverview({ people, balances, onSettleUp, onPer
               <span className="font-[family-name:var(--font-tenor)] text-[var(--text-primary)]">
                 {person.name}
               </span>
-              <span className="font-mono text-[var(--accent-secondary)]">
+              <span className="font-mono text-[var(--accent-primary)]">
                 +{formatCurrency(balance.amountCents)}
               </span>
             </button>

@@ -33,7 +33,7 @@ export default function ExpenseCard({ expense }: Props) {
   const shares = calculateExpenseShares(
     expense.amount_cents,
     participantIds,
-    expense.paid_by,
+    expense.paid_by.id,
     useLodgingLogic,
     useLodgingLogic ? nightsMap : null
   )
@@ -54,7 +54,7 @@ export default function ExpenseCard({ expense }: Props) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h4
-            className="font-[family-name:var(--font-playfair)] italic text-lg"
+            className="font-[family-name:var(--font-baskerville)] italic text-lg"
             style={{ color: 'var(--text-primary)' }}
           >
             {expense.title}
@@ -102,7 +102,7 @@ export default function ExpenseCard({ expense }: Props) {
           {expense.expense_participants.map((ep) => {
             const share = shares.find((s) => s.personId === ep.person_id)
             const shareAmount = share?.amountCents ?? 0
-            const isPayer = ep.person_id === expense.paid_by
+            const isPayer = ep.person_id === expense.paid_by.id
 
             return (
               <div

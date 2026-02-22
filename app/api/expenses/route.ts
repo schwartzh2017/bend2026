@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import type { Expense, ExpenseParticipant, Person } from '@/lib/supabase/types'
+import type { Expense, ExpenseParticipant, Person, InsertTables } from '@/lib/supabase/types'
 
 type ExpenseWithRelations = Expense & {
   paid_by: Person
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
 
     const { error: participantsError } = await supabase
       .from('expense_participants')
-      .insert(participantsToInsert as never[])
+      .insert(participantsToInsert as never)
 
     if (participantsError) {
       await supabase.from('expenses').delete().eq('id', typedExpense.id)

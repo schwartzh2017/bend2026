@@ -33,7 +33,7 @@ export default function CategoryHeader({ category }: Props) {
         style={{ backgroundColor: color }}
       />
       <h3
-        className="font-[family-name:var(--font-playfair)] font-bold text-sm uppercase tracking-[0.08em]"
+        className="font-[family-name:var(--font-tenor)] text-sm uppercase tracking-[0.08em]"
         style={{ color: 'var(--text-secondary)' }}
       >
         {label}

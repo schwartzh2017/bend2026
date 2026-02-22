@@ -18,6 +18,8 @@ export default function ExpensesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const fetchExpenses = useCallback(async () => {
+    setIsLoading(true)
+    setError('')
     try {
       const response = await fetch('/api/expenses')
       if (!response.ok) {
@@ -49,7 +51,7 @@ export default function ExpensesPage() {
       <div className="max-w-[680px] mx-auto p-4">
         <div className="flex items-center justify-between mb-8">
           <h1
-            className="font-[family-name:var(--font-playfair)] font-black text-3xl"
+            className="font-[family-name:var(--font-tenor)] text-3xl"
             style={{ color: 'var(--text-primary)' }}
           >
             Expenses

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import type { UpdateTables } from '@/lib/supabase/types'
 
 export async function PATCH(
   request: Request,

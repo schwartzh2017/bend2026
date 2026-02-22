@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import type { Expense, ExpenseParticipant, Person, Settlement } from '@/lib/supabase/types'
+import type { Person, Settlement, InsertTables } from '@/lib/supabase/types'
 import {
   calculateExpenseShares,
   calculateNetBalances,
@@ -8,9 +8,14 @@ import {
   type Transaction,
 } from '@/lib/expenseLogic'
 
-type ExpenseWithRelations = Expense & {
-  paid_by: Person
-  expense_participants: (ExpenseParticipant & { person: Person })[]
+type ExpenseForCalc = {
+  id: string
+  title: string
+  amount_cents: number
+  paid_by: string
+  category: string
+  date: string
+  expense_participants: { person_id: string; nights: number | null }[]
 }
 
 export async function GET() {
@@ -49,14 +54,7 @@ export async function POST() {
 
     const { data: expensesData, error: expensesError } = await supabase
       .from('expenses')
-      .select(`
-        *,
-        paid_by:people(*),
-        expense_participants(
-          *,
-          person:people(*)
-        )
-      `)
+      .select(`*, expense_participants(*)`)
       .order('date', { ascending: false })
 
     if (expensesError) {
@@ -64,7 +62,7 @@ export async function POST() {
       return NextResponse.json({ error: 'Failed to fetch expenses' }, { status: 500 })
     }
 
-    const expenses = expensesData as ExpenseWithRelations[]
+    const expenses = expensesData as ExpenseForCalc[]
 
     const { data: peopleData, error: peopleError } = await supabase
       .from('people')
@@ -137,7 +135,7 @@ export async function POST() {
 
     const { data: insertedSettlements, error: insertError } = await supabase
       .from('settlements')
-      .insert(settlementsToInsert as never[])
+      .insert(settlementsToInsert as never)
       .select(`
         *,
         from_person:people!settlements_from_person_id_fkey(*),

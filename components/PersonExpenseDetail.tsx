@@ -57,7 +57,7 @@ export default function PersonExpenseDetail({
             <span
               className={`font-mono text-lg ${
                 balance.amountCents > 0
-                  ? 'text-[var(--accent-secondary)]'
+                  ? 'text-[var(--accent-primary)]'
                   : balance.amountCents < 0
                     ? 'text-[var(--accent-warm)]'
                     : 'text-[var(--text-muted)]'
