@@ -281,3 +281,4 @@ export type ExpenseParticipant = Database['public']['Tables']['expense_participa
 export type Person = Database['public']['Tables']['people']['Row']
 export type Settlement = Database['public']['Tables']['settlements']['Row']
 export type GroceryItem = Database['public']['Tables']['grocery_items']['Row']
+export type Document = Database['public']['Tables']['documents']['Row']
