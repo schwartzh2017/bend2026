@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import type { Person, Settlement } from '@/lib/supabase/types'
+import type { Person, Settlement, InsertTables } from '@/lib/supabase/types'
 import {
   calculateExpenseShares,
   calculateNetBalances,
@@ -135,7 +135,7 @@ export async function POST() {
 
     const { data: insertedSettlements, error: insertError } = await supabase
       .from('settlements')
-      .insert(settlementsToInsert as never[])
+      .insert(settlementsToInsert as never)
       .select(`
         *,
         from_person:people!settlements_from_person_id_fkey(*),
