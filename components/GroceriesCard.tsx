@@ -10,14 +10,14 @@ type Props = {
 export default function GroceriesCard({ items }: Props) {
   if (items.length === 0) {
     return (
-      <HomeCard title="Groceries" href="/groceries">
+      <HomeCard title="Groceries" href="/grocery">
         <p style={{ color: 'var(--text-muted)' }}>Grocery list is empty</p>
       </HomeCard>
     )
   }
 
   return (
-    <HomeCard title="Groceries" href="/groceries">
+    <HomeCard title="Groceries" href="/grocery">
       <div className="space-y-2">
         {items.map((item) => (
           <div

@@ -26,7 +26,13 @@ export default function UpcomingEventsCard({ events }: Props) {
     <HomeCard title="Upcoming" href="/schedule">
       <div className="space-y-3">
         {events.map((event) => {
-          const time = new Date(event.starts_at).toLocaleTimeString('en-US', {
+          const eventDate = new Date(event.starts_at)
+          const date = eventDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            timeZone: 'America/Los_Angeles',
+          })
+          const time = eventDate.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
             timeZone: 'America/Los_Angeles',
@@ -43,7 +49,7 @@ export default function UpcomingEventsCard({ events }: Props) {
                 className="font-mono text-sm flex-shrink-0"
                 style={{ color: 'var(--text-muted)' }}
               >
-                {time}
+                {date} · {time}
               </time>
               <span
                 className="font-[family-name:var(--font-baskerville)] truncate"
