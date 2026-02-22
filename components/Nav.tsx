@@ -97,12 +97,6 @@ export default function Nav() {
               }}
             >
               {icons[item.icon]}
-              <span
-                className="mt-1 text-[10px] uppercase tracking-[0.06em]"
-                style={{ fontFamily: 'var(--font-tenor)' }}
-              >
-                {item.label}
-              </span>
             </Link>
           )
         })}
