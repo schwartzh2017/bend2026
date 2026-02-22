@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import bcrypt from 'bcrypt'
-import { createClient } from '@/lib/supabase/server'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { signSession } from '@/lib/auth'
 import { SESSION_COOKIE_NAME, COOKIE_MAX_AGE_SECONDS } from '@/lib/constants'
 
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid PIN format' }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    const supabase = await createServerSupabaseClient()
     const { data, error } = await supabase
       .from('app_config')
       .select('id, passcode_hash')

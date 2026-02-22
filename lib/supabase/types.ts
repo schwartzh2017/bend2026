@@ -236,3 +236,5 @@ export type InsertTables<T extends keyof Database['public']['Tables']> =
 
 export type UpdateTables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Update']
+
+export type Event = Database['public']['Tables']['events']['Row']

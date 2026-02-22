@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { verifySession } from '@/lib/auth'
 import { SESSION_COOKIE_NAME, PUBLIC_ROUTES, PUBLIC_ROUTE_PREFIXES } from '@/lib/constants'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Allow public routes through without authentication
