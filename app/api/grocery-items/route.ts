@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
-import type { GroceryItem, Person } from '@/lib/supabase/types'
+import type { GroceryItem, Person, InsertTables, UpdateTables } from '@/lib/supabase/types'
 
 type GroceryItemWithPerson = GroceryItem & {
   requested_by: Person | null
@@ -49,7 +49,9 @@ export async function POST(request: Request) {
 
     const supabase = await createServerSupabaseClient()
 
-    const insertData = {
+    // Typed at assignment — catches field errors at compile time even if the SDK
+    // call site requires a cast due to Supabase SSR client generic limitations.
+    const insertData: InsertTables<'grocery_items'> = {
       name: body.name.trim(),
       category: body.category || 'other',
       quantity: body.quantity?.trim() || null,
@@ -58,9 +60,10 @@ export async function POST(request: Request) {
       is_checked: false,
     }
 
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from('grocery_items')
-      .insert(insertData as never)
+      .insert(insertData)
       .select(`
         *,
         requested_by:people(*)
@@ -94,9 +97,13 @@ export async function PATCH(request: Request) {
 
     const supabase = await createServerSupabaseClient()
 
-    const { data, error } = await supabase
+    // Typed at assignment — catches field errors at compile time.
+    const updateData: UpdateTables<'grocery_items'> = { is_checked }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from('grocery_items')
-      .update({ is_checked } as never)
+      .update(updateData)
       .eq('id', id)
       .select(`
         *,
