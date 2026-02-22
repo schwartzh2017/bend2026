@@ -238,3 +238,5 @@ export type UpdateTables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Update']
 
 export type Event = Database['public']['Tables']['events']['Row']
+export type Person = Database['public']['Tables']['people']['Row']
+export type GroceryItem = Database['public']['Tables']['grocery_items']['Row']

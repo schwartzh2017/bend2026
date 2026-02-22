@@ -81,3 +81,60 @@ body {
 .animate-shake {
   animation: shake 0.3s ease-in-out;
 }
+
+.grocery-checkbox {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 200ms ease;
+  flex-shrink: 0;
+}
+
+.grocery-checkbox:checked {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.grocery-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.grocery-checkbox:hover {
+  border-color: var(--accent-primary);
+}
+
+.grocery-item-text {
+  position: relative;
+  transition: color 200ms ease;
+}
+
+.grocery-item-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--text-muted);
+  transition: width 200ms ease;
+}
+
+.grocery-item-checked .grocery-item-text::after {
+  width: 100%;
+}
+
+.grocery-item-checked .grocery-item-text {
+  color: var(--text-muted);
+}
