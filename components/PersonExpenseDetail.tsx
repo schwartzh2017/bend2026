@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/lib/formatCurrency'
-import type { SettlementPerson, SettlementBalance, SettlementExpense } from '@/app/expenses/settle/SettlementClient'
+import type { SettlementPerson, SettlementBalance, SettlementExpense } from '@/types/settlement'
 
 type Props = {
   person: SettlementPerson

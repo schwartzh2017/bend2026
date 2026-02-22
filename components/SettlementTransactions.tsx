@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { getSettlementStatus } from '@/lib/expenseLogic'
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants'
-import type { SettlementPerson } from '@/app/expenses/settle/SettlementClient'
+import type { SettlementPerson } from '@/types/settlement'
 import type { Person, Settlement } from '@/lib/supabase/types'
 
 type SettlementWithPeople = Settlement & {
