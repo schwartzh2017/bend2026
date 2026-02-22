@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import {
   calculateNetBalances,
   calculateExpenseShares,
+  simplifyDebts,
   type ExpenseWithParticipants,
 } from '@/lib/expenseLogic'
 import type { Tables, Person } from '@/lib/supabase/types'
@@ -10,12 +11,20 @@ type GroceryItemWithPerson = Tables<'grocery_items'> & {
   requested_by: Person | null
 }
 
+export type HomePageTransaction = {
+  counterpartId: string
+  counterpartName: string
+  amountCents: number
+  direction: 'owe' | 'owed'  // 'owe' = I owe them, 'owed' = they owe me
+}
+
 export type HomePageData = {
   tripStartDate: string | null
   upcomingEvents: Tables<'events'>[]
   personId: string | null
   personName: string | null
   balanceCents: number | null
+  myTransactions: HomePageTransaction[]
   recentGroceries: GroceryItemWithPerson[]
 }
 
@@ -54,6 +63,7 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
   // Balance-related queries only run when we have a personId
   let balanceCents: number | null = null
   let personName: string | null = null
+  let myTransactions: HomePageTransaction[] = []
 
   if (personId) {
     const [
@@ -122,6 +132,35 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
         const balances = calculateNetBalances(expensesWithShares, personIds)
         const userBalance = balances.find((b) => b.personId === personId)
         balanceCents = userBalance?.amountCents ?? 0
+
+        const allTransactions = simplifyDebts(balances)
+
+        // Transactions where I owe someone
+        for (const t of allTransactions) {
+          if (t.from === personId) {
+            const counterpart = people.find((p) => p.id === t.to)
+            if (counterpart) {
+              myTransactions.push({
+                counterpartId: t.to,
+                counterpartName: counterpart.name,
+                amountCents: t.amountCents,
+                direction: 'owe',
+              })
+            }
+          }
+          // Transactions where someone owes me
+          if (t.to === personId) {
+            const counterpart = people.find((p) => p.id === t.from)
+            if (counterpart) {
+              myTransactions.push({
+                counterpartId: t.from,
+                counterpartName: counterpart.name,
+                amountCents: t.amountCents,
+                direction: 'owed',
+              })
+            }
+          }
+        }
       }
     }
   }
@@ -132,6 +171,7 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
     personId,
     personName,
     balanceCents,
+    myTransactions,
     recentGroceries,
   }
 }
