@@ -112,7 +112,7 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
     >
       <div className="flex items-center justify-between mb-2">
         <h3
-          className="font-[family-name:var(--font-tenor)] font-bold text-sm uppercase tracking-[0.1em]"
+          className="font-[family-name:var(--font-tenor)] text-sm uppercase tracking-[0.06em]"
           style={{ color: 'var(--text-secondary)' }}
         >
           Add Item
@@ -136,9 +136,8 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Item name"
-          className="px-3 py-2 rounded-sm border focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
+          className="px-0 py-2 border-b-2 border-t-0 border-l-0 border-r-0 bg-transparent focus:outline-none focus:border-[var(--accent-primary)] rounded-none"
           style={{
-            backgroundColor: 'var(--bg-primary)',
             borderColor: 'var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -149,9 +148,8 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           placeholder="Qty"
-          className="w-20 px-3 py-2 rounded-sm border focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] font-mono text-sm"
+          className="w-20 px-0 py-2 border-b-2 border-t-0 border-l-0 border-r-0 bg-transparent focus:outline-none focus:border-[var(--accent-primary)] rounded-none font-mono text-sm"
           style={{
-            backgroundColor: 'var(--bg-primary)',
             borderColor: 'var(--border)',
             color: 'var(--text-primary)',
           }}
