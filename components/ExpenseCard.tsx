@@ -89,7 +89,7 @@ export default function ExpenseCard({ expense }: Props) {
 
       <div
         className={`overflow-hidden transition-all duration-200 ${
-          isExpanded ? 'max-h-96 mt-4 pt-4 border-t border-[var(--border)]' : 'max-h-0'
+          isExpanded ? 'mt-4 pt-4 border-t border-[var(--border)]' : 'max-h-0'
         }`}
       >
         <p
