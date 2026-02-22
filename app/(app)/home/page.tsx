@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { cookies } from 'next/headers'
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants'
 import CountdownCard from '@/components/CountdownCard'
