@@ -15,6 +15,8 @@ export interface Database {
           name: string
           color: string
           default_nights: number
+          payment_method: string | null
+          payment_handle: string | null
           created_at: string
         }
         Insert: {
@@ -22,6 +24,8 @@ export interface Database {
           name: string
           color: string
           default_nights: number
+          payment_method?: string | null
+          payment_handle?: string | null
           created_at?: string
         }
         Update: {
@@ -29,6 +33,8 @@ export interface Database {
           name?: string
           color?: string
           default_nights?: number
+          payment_method?: string | null
+          payment_handle?: string | null
           created_at?: string
         }
       }
@@ -215,6 +221,38 @@ export interface Database {
           updated_at?: string
         }
       }
+      settlements: {
+        Row: {
+          id: string
+          from_person_id: string
+          to_person_id: string
+          amount_cents: number
+          sender_confirmed: boolean
+          receiver_confirmed: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          from_person_id: string
+          to_person_id: string
+          amount_cents: number
+          sender_confirmed?: boolean
+          receiver_confirmed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          from_person_id?: string
+          to_person_id?: string
+          amount_cents?: number
+          sender_confirmed?: boolean
+          receiver_confirmed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -238,5 +276,8 @@ export type UpdateTables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Update']
 
 export type Event = Database['public']['Tables']['events']['Row']
+export type Expense = Database['public']['Tables']['expenses']['Row']
+export type ExpenseParticipant = Database['public']['Tables']['expense_participants']['Row']
 export type Person = Database['public']['Tables']['people']['Row']
+export type Settlement = Database['public']['Tables']['settlements']['Row']
 export type GroceryItem = Database['public']['Tables']['grocery_items']['Row']
