@@ -23,7 +23,7 @@ async function verifySession(token: string): Promise<boolean> {
 }
 
 const PUBLIC_ROUTES = ['/login', '/identify']
-const PUBLIC_ROUTE_PREFIXES = ['/api/auth']
+const PUBLIC_ROUTE_PREFIXES = ['/api/auth', '/api/identify']
 
 function isPublicRoute(pathname: string): boolean {
   if (PUBLIC_ROUTES.includes(pathname)) return true

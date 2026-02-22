@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     // Set secure session cookie
     cookieStore.set(SESSION_COOKIE_NAME, token, {
       httpOnly: true,
-      secure: true, // Always use secure cookies
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict', // Prevent CSRF attacks
       maxAge: COOKIE_MAX_AGE_SECONDS,
       path: '/',

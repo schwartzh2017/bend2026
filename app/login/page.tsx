@@ -93,8 +93,10 @@ function LoginContent() {
         return
       }
 
-      // Redirect to safe return URL
-      router.push(safeReturnUrl)
+      // Check if user has identified themselves
+      const existingPersonId = localStorage.getItem('bend_person_id')
+      const destination = existingPersonId ? safeReturnUrl : '/identify'
+      router.push(destination)
     } catch (error) {
       clearTimeout(timeoutId)
       console.error('Login error:', error)
