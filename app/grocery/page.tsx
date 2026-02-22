@@ -41,12 +41,14 @@ export default function GroceryPage() {
     )
 
     try {
-      await fetch('/api/grocery-items', {
+      const response = await fetch('/api/grocery-items', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, is_checked }),
       })
+      if (!response.ok) throw new Error('Failed to update')
     } catch (err) {
+      // Roll back optimistic update on any failure (network or non-2xx)
       setItems((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, is_checked: !is_checked } : item
