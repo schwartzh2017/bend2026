@@ -27,6 +27,7 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
   const [quantity, setQuantity] = useState('')
   const [category, setCategory] = useState('produce')
   const [requestedBy, setRequestedBy] = useState('')
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     const fetchPeople = async () => {
@@ -50,6 +51,7 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
     if (!name.trim()) return
 
     setIsLoading(true)
+    setSubmitError('')
     try {
       const response = await fetch('/api/grocery-items', {
         method: 'POST',
@@ -68,9 +70,12 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
         setCategory('produce')
         setIsOpen(false)
         onItemAdded()
+      } else {
+        setSubmitError('Failed to add item. Please try again.')
       }
     } catch (error) {
       console.error('Failed to add item:', error)
+      setSubmitError('Failed to add item. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -188,6 +193,12 @@ export default function AddGroceryForm({ onItemAdded }: Props) {
           ))}
         </select>
       </div>
+
+      {submitError && (
+        <p className="text-xs" style={{ color: 'var(--error)' }}>
+          {submitError}
+        </p>
+      )}
 
       <button
         type="submit"
