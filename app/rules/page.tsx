@@ -50,7 +50,7 @@ export default async function RulesPage() {
         <h1 className="font-[family-name:var(--font-tenor)] text-3xl text-[var(--text-primary)] mb-8">
           {document.title}
         </h1>
-        <article className="prose prose-lg max-w-[65ch]">
+        <article>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -70,25 +70,30 @@ export default async function RulesPage() {
                 </p>
               ),
               ul: ({ children }) => (
-                <ul className="font-[family-name:var(--font-baskerville)] pl-6 mb-4 space-y-2 text-[var(--text-secondary)]">
+                <ul className="font-[family-name:var(--font-baskerville)] pl-6 mb-4 space-y-2 text-[var(--text-secondary)] list-disc">
                   {children}
                 </ul>
               ),
               ol: ({ children }) => (
-                <ol className="font-[family-name:var(--font-baskerville)] pl-6 mb-4 space-y-2 text-[var(--text-secondary)]">
+                <ol className="font-[family-name:var(--font-baskerville)] pl-6 mb-4 space-y-2 text-[var(--text-secondary)] list-decimal">
                   {children}
                 </ol>
               ),
               li: ({ children }) => (
-                <li className="text-[var(--text-secondary)] leading-[1.7]">
+                <li className="font-[family-name:var(--font-baskerville)] text-[var(--text-secondary)] leading-[1.7]">
                   {children}
                 </li>
+              ),
+              strong: ({ children }) => (
+                <strong className="font-bold text-[var(--text-primary)]">
+                  {children}
+                </strong>
               ),
               code: ({ className, children }) => {
                 const isInline = !className
                 if (isInline) {
                   return (
-                    <code className="font-[family-name:var(--font-jetbrains)] text-sm bg-[var(--bg-secondary)] px-1 rounded-sm">
+                    <code className="font-[family-name:var(--font-jetbrains)] text-sm bg-[var(--bg-secondary)] text-[var(--accent-primary)] px-1 rounded-sm">
                       {children}
                     </code>
                   )
@@ -100,9 +105,12 @@ export default async function RulesPage() {
                 )
               },
               blockquote: ({ children }) => (
-                <blockquote className="border-l-2 border-[var(--accent-primary)] pl-4 italic text-[var(--text-muted)]">
+                <blockquote className="border-l-2 border-[var(--accent-primary)] pl-4 italic text-[var(--text-muted)] my-4">
                   {children}
                 </blockquote>
+              ),
+              hr: () => (
+                <hr className="my-8 border-[var(--border)]" />
               ),
               a: ({ href, children }) => (
                 <a
