@@ -121,7 +121,8 @@ Load these skill files at the start of relevant sessions:
 
 > Claude: append mistakes and corrections here as they occur. Date each entry.
 
-- *[entries will accumulate here over time]*
+- **2026-02-22 — Next.js 16 proxy convention:** This project uses Next.js 16, which deprecated `middleware.ts` in favor of `proxy.ts`. The root file must be `proxy.ts` with `export async function proxy(...)`. Do NOT rename it back to `middleware.ts`. Next.js 16 will log a deprecation error if you use the old name.
+- **2026-02-22 — proxy.ts requires a config matcher export:** `proxy.ts` MUST include `export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',] }`. Without this, the proxy intercepts `_next/static` asset requests on Vercel, returns an HTML redirect instead of JS, and causes `Unexpected token '<'` errors that break the entire app. Always include the matcher when editing proxy.ts.
 
 ---
 
