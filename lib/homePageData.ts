@@ -26,6 +26,10 @@ export type HomePageData = {
   balanceCents: number | null
   myTransactions: HomePageTransaction[]
   recentGroceries: GroceryItemWithPerson[]
+  secretAssignment: {
+    assignedPersonName: string
+    assignedWord: string
+  } | null
 }
 
 export async function getHomePageData(personId: string | null): Promise<HomePageData> {
@@ -63,7 +67,8 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
   // Balance-related queries only run when we have a personId
   let balanceCents: number | null = null
   let personName: string | null = null
-  let myTransactions: HomePageTransaction[] = []
+  const myTransactions: HomePageTransaction[] = []
+  const secretAssignment: { assignedPersonName: string; assignedWord: string } | null = null
 
   if (personId) {
     const [
@@ -87,6 +92,18 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
 
       const person = people.find((p) => p.id === personId)
       personName = person?.name ?? null
+
+      let secretAssignment: { assignedPersonName: string; assignedWord: string } | null = null
+
+      if (person?.assigned_person_id && person?.assigned_word) {
+        const assignedPerson = people.find((p) => p.id === person.assigned_person_id)
+        if (assignedPerson) {
+          secretAssignment = {
+            assignedPersonName: assignedPerson.name,
+            assignedWord: person.assigned_word,
+          }
+        }
+      }
 
       if (expenses.length === 0) {
         // No expenses yet — keep balanceCents as null so the card shows "No expenses yet"
@@ -173,5 +190,6 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
     balanceCents,
     myTransactions,
     recentGroceries,
+    secretAssignment,
   }
 }

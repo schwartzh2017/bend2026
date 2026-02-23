@@ -17,6 +17,8 @@ export interface Database {
           default_nights: number
           payment_method: string | null
           payment_handle: string | null
+          assigned_person_id: string | null
+          assigned_word: string | null
           created_at: string
         }
         Insert: {
@@ -26,6 +28,8 @@ export interface Database {
           default_nights: number
           payment_method?: string | null
           payment_handle?: string | null
+          assigned_person_id?: string | null
+          assigned_word?: string | null
           created_at?: string
         }
         Update: {
@@ -35,6 +39,8 @@ export interface Database {
           default_nights?: number
           payment_method?: string | null
           payment_handle?: string | null
+          assigned_person_id?: string | null
+          assigned_word?: string | null
           created_at?: string
         }
       }
