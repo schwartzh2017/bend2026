@@ -24,36 +24,41 @@ declare
     'kaleidoscope', 'lighthouse', 'marigold', 'nostalgia', 'orchid',
     'papyrus', 'quicksand', 'raspberry', 'saffron', 'thunder'
   ];
-  people_array uuid[] := array(SELECT id FROM people);
-  person_count int;
   random_word text;
 begin
-  person_count := array_length(people_array, 1);
-  
+  if (select count(*) from people) = 0 then
+    raise exception 'people table is empty — run people seed first';
+  end if;
+
   for person_record in select id from people loop
-    -- Select a random person who is not themselves
-    loop
-      select id into target_record.id 
-      from people 
-      where id != person_record.id 
-      and id != all(
-        COALESCE(
-          (SELECT array_agg(id) FROM people WHERE assigned_person_id = person_record.id),
-          array[]::uuid[]
-        )
+    -- Select a random person who is not themselves and not already assigned as a target
+    select id into target_record.id
+    from people
+    where id != person_record.id
+    and id != all(
+      COALESCE(
+        (SELECT array_agg(assigned_person_id) FROM people WHERE assigned_person_id IS NOT NULL),
+        array[]::uuid[]
       )
-      order by random() 
+    )
+    order by random()
+    limit 1;
+
+    -- If everyone is already a target (edge case with small groups), fall back to any non-self person
+    if not found then
+      select id into target_record.id
+      from people
+      where id != person_record.id
+      order by random()
       limit 1;
-      
-      exit when found;
-    end loop;
-    
-    -- Select a random word
+    end if;
+
+    -- Select a random word (random() is in [0,1), so index is safely in [1, array_length]
     random_word := words[1 + floor(random() * array_length(words, 1))::int];
-    
+
     -- Update the person with their assignment
-    update people 
-    set assigned_person_id = target_record.id, 
+    update people
+    set assigned_person_id = target_record.id,
         assigned_word = random_word
     where id = person_record.id;
   end loop;

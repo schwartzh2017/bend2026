@@ -7,13 +7,13 @@ VALUES (
 
 ## Overview
 
-Welcome to our game! The rules will be added here once we decide what we're playing.
+Welcome to our game! The rules will be added here once we decide what we''re playing.
 
 ## Getting Started
 
-Stay tuned for the full rulebook. In the meantime, here's what we know:
+Stay tuned for the full rulebook. In the meantime, here''s what we know:
 
-- We're going to have a great time
+- We''re going to have a great time
 - The game will be easy to learn
 - Everyone can participate
 

@@ -68,7 +68,7 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
   let balanceCents: number | null = null
   let personName: string | null = null
   const myTransactions: HomePageTransaction[] = []
-  const secretAssignment: { assignedPersonName: string; assignedWord: string } | null = null
+  let secretAssignment: { assignedPersonName: string; assignedWord: string } | null = null
 
   if (personId) {
     const [
@@ -92,8 +92,6 @@ export async function getHomePageData(personId: string | null): Promise<HomePage
 
       const person = people.find((p) => p.id === personId)
       personName = person?.name ?? null
-
-      let secretAssignment: { assignedPersonName: string; assignedWord: string } | null = null
 
       if (person?.assigned_person_id && person?.assigned_word) {
         const assignedPerson = people.find((p) => p.id === person.assigned_person_id)
