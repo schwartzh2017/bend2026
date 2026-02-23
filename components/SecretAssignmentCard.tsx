@@ -27,7 +27,7 @@ export default function SecretAssignmentCard({
           className="font-[family-name:var(--font-tenor)] text-xs uppercase tracking-[0.06em]"
           style={{ color: 'var(--text-muted)' }}
         >
-          Your Secret Project Has Been Assigned
+          Your Secret Assignment
         </h2>
         <button
           onClick={() => setIsVisible(!isVisible)}
