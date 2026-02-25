@@ -142,27 +142,4 @@ A few things that tripped us up that might help others:
 
 ---
 
-## Steps for Running Locally
-
-```bash
-git clone https://github.com/yourusername/bend2026.git
-cd bend2026
-npm install
-```
-
-Create `.env.local`:
-```
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-JWT_SECRET=your-jwt-secret
-```
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
----
-
-Enjoy 👻
+*Enjoy* 👻
