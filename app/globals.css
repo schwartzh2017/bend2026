@@ -69,6 +69,7 @@ body {
   color: var(--text-primary);
   font-family: var(--font-body), Georgia, serif;
   line-height: 1.7;
+  overscroll-behavior-y: none;
 }
 
 @keyframes shake {
