@@ -90,6 +90,14 @@ export default function ExpenseCard({ expense }: Props) {
           isExpanded ? 'mt-4 pt-4 border-t border-[var(--border)]' : 'max-h-0'
         }`}
       >
+        {expense.description && (
+          <p
+            className="text-sm mb-4 italic"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            {expense.description}
+          </p>
+        )}
         <p
           className="text-sm mb-3 uppercase tracking-wider"
           style={{ color: 'var(--text-muted)' }}
