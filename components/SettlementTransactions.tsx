@@ -83,21 +83,6 @@ export default function SettlementTransactions({ people, expectedTransactions, o
     loadSettlements()
   }, [])
 
-  const handleRecalculate = async () => {
-    setIsLoading(true)
-    setError('')
-    try {
-      const syncResponse = await fetch('/api/settlements', { method: 'POST' })
-      if (!syncResponse.ok) throw new Error('Failed to recalculate')
-      const { data } = await syncResponse.json()
-      setSettlements(data || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to recalculate')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   const handleConfirm = async (
     settlementId: string,
     field: 'sender_confirmed' | 'receiver_confirmed',
@@ -158,21 +143,13 @@ export default function SettlementTransactions({ people, expectedTransactions, o
           <h2 className="font-[family-name:var(--font-tenor)] text-xl text-[var(--text-primary)]">
             Settle Up
           </h2>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleRecalculate}
-              className="text-xs font-[family-name:var(--font-baskerville)] text-[var(--text-muted)] hover:text-[var(--text-primary)] underline"
-            >
-              Recalculate
-            </button>
-            <button
-              onClick={onClose}
-              className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl leading-none"
-              aria-label="Close"
-            >
-              ×
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl leading-none"
+            aria-label="Close"
+          >
+            ×
+          </button>
         </div>
 
         <div className="p-4">
