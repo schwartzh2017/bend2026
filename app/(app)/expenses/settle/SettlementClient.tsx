@@ -50,6 +50,7 @@ export default function SettlementClient({ data }: Props) {
       {showTransactions && (
         <SettlementTransactions
           people={data.people}
+          expectedTransactions={data.simplifiedTransactions}
           onClose={() => setShowTransactions(false)}
         />
       )}

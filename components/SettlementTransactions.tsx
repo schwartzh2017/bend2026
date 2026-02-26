@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { getSettlementStatus } from '@/lib/expenseLogic'
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants'
-import type { SettlementPerson } from '@/types/settlement'
+import type { SettlementPerson, SettlementTransaction } from '@/types/settlement'
 import type { Person, Settlement } from '@/lib/supabase/types'
 
 type SettlementWithPeople = Settlement & {
@@ -14,6 +14,7 @@ type SettlementWithPeople = Settlement & {
 
 type Props = {
   people: SettlementPerson[]
+  expectedTransactions: SettlementTransaction[]
   onClose: () => void
 }
 
@@ -23,7 +24,26 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
   zelle: 'Zelle',
 }
 
-export default function SettlementTransactions({ people, onClose }: Props) {
+function transactionsMatch(
+  dbRows: SettlementWithPeople[],
+  expected: SettlementTransaction[]
+): boolean {
+  if (dbRows.length !== expected.length) return false
+  const sortKey = (t: { from_person_id: string; to_person_id: string }) =>
+    `${t.from_person_id}:${t.to_person_id}`
+  const dbSorted = [...dbRows].sort((a, b) => sortKey(a).localeCompare(sortKey(b)))
+  const expSorted = [...expected].sort((a, b) =>
+    `${a.from}:${a.to}`.localeCompare(`${b.from}:${b.to}`)
+  )
+  return dbSorted.every(
+    (row, i) =>
+      row.from_person_id === expSorted[i].from &&
+      row.to_person_id === expSorted[i].to &&
+      row.amount_cents === expSorted[i].amountCents
+  )
+}
+
+export default function SettlementTransactions({ people, expectedTransactions, onClose }: Props) {
   const [settlements, setSettlements] = useState<SettlementWithPeople[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -43,8 +63,9 @@ export default function SettlementTransactions({ people, onClose }: Props) {
         if (!fetchResponse.ok) throw new Error('Failed to fetch settlements')
         const { data } = await fetchResponse.json()
 
-        // Only generate settlements if none exist yet (first open ever)
-        if (!data || data.length === 0) {
+        // Recalculate if DB is empty or out of sync with current expenses
+        const needsRecalc = !data || data.length === 0 || !transactionsMatch(data, expectedTransactions)
+        if (needsRecalc) {
           const syncResponse = await fetch('/api/settlements', { method: 'POST' })
           if (!syncResponse.ok) throw new Error('Failed to generate settlements')
           const syncData = await syncResponse.json()
