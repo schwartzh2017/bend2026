@@ -78,7 +78,7 @@ export async function POST() {
 
     const expensesWithShares = expenses.map((expense) => {
       const participantIds = expense.expense_participants.map((p) => p.person_id)
-      const isLodging = expense.category === 'lodging'
+      const isLodging = expense.expense_participants.some((p) => p.nights !== null)
 
       const nightsMap = new Map<string, number>()
       if (isLodging) {

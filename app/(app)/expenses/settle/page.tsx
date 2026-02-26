@@ -46,7 +46,7 @@ export default async function SettlePage() {
 
   const expensesWithShares: ExpenseWithParticipants[] = expenses.map((expense) => {
     const expenseParticipants = participantsByExpense.get(expense.id) ?? []
-    const isLodging = expense.category === 'lodging' && expenseParticipants.some((p) => p.nights !== null)
+    const isLodging = expenseParticipants.some((p) => p.nights !== null)
 
     const nightsMap = isLodging
       ? new Map(expenseParticipants.map((p) => [p.person_id, p.nights ?? 0]))

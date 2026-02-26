@@ -21,9 +21,7 @@ export default function ExpenseCard({ expense }: Props) {
   const payerName = expense.paid_by.name
   const payerColor = expense.paid_by.color
 
-  const isLodging = expense.category === 'lodging'
-  const hasNights = expense.expense_participants.some((p) => p.nights !== null)
-  const useLodgingLogic = isLodging && hasNights
+  const useLodgingLogic = expense.expense_participants.some((p) => p.nights !== null)
 
   const participantIds = expense.expense_participants.map((p) => p.person_id)
   const nightsMap = new Map(
